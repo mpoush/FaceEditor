@@ -10,6 +10,7 @@ NUM_KERNELS = 20
 CONTINUE_TRAIN = False
 
 NUM_EPOCHS = 2000
+SAVE_EVERY = 20
 PARAM_SIZE = 80
 LR = 0.001
 NUM_RAND_FACES = BATCH_SIZE
@@ -167,7 +168,7 @@ for iters in xrange(NUM_EPOCHS):
 
 	plotScores(train_loss, [], 'EncoderScores.png', True)
 	
-	if iters % 20 == 0:
+	if iters % SAVE_EVERY == 0:
 		model.save('Encoder.h5')
 		
 		y_faces = model.predict(x_train[:NUM_TEST_FACES], batch_size=BATCH_SIZE)

@@ -169,6 +169,9 @@ while running:
 			if event.key == pygame.K_r:
 				cur_params = np.clip(np.random.normal(0.0, 1.0, (num_params,)), -3.0, 3.0)
 				needs_update = True
+			elif event.key == pygame.K_c:
+				cur_params = np.zeros((num_params,), dtype=np.float32)
+				needs_update = True
 
 	#Check if we need an update
 	if needs_update:

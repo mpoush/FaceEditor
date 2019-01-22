@@ -5,11 +5,13 @@ from dutil import *
 
 NUM_IMAGES = 1769
 SAMPLES_PER_IMG = 10
+NUM_CHANNELS=4
 DOTS_PER_IMG = 60
 IMAGE_W = 144
 IMAGE_H = 192
 IMAGE_DIR = 'YB_PICTURES'
-NUM_SAMPLES = NUM_IMAGES * 2 * SAMPLES_PER_IMG
+FLIP = True
+NUM_SAMPLES = NUM_IMAGES * (FLIP+1) * SAMPLES_PER_IMG
 
 def center_resize(img):
 	assert(IMAGE_W == IMAGE_H)
@@ -22,8 +24,6 @@ def center_resize(img):
 	return cv2.resize(img, (IMAGE_W, IMAGE_H), interpolation = cv2.INTER_LINEAR)
 
 def yb_resize(img):
-	assert(img.shape[1] == 151)
-	assert(img.shape[0] == 197)
 	return cv2.resize(img, (IMAGE_W, IMAGE_H), interpolation = cv2.INTER_LINEAR)
 	
 def rand_dots(img, sample_ix):
@@ -35,7 +35,7 @@ y_data = np.empty((NUM_SAMPLES, 3, IMAGE_H, IMAGE_W), dtype=np.uint8)
 ix = 0
 for root, subdirs, files in os.walk(IMAGE_DIR):
 	for file in files:
-		path = root + "\\" + file
+		path = root + "/" + file
 		if not (path.endswith('.jpg') or path.endswith('.png')):
 			continue
 		img = cv2.imread(path)
@@ -55,9 +55,10 @@ for root, subdirs, files in os.walk(IMAGE_DIR):
 				cv2.imwrite('cargb' + str(ix) + '.png', outimg)
 				print path
 			ix += 1
-			y_data[ix] = np.flip(y_data[ix - 1], axis=2)
-			x_data[ix] = np.flip(x_data[ix - 1], axis=2)
-			ix += 1
+			if(FLIP):
+				y_data[ix] = np.flip(y_data[ix - 1], axis=2)
+				x_data[ix] = np.flip(x_data[ix - 1], axis=2)
+				ix += 1
 			
 		sys.stdout.write('\r')
 		progress = ix * 100 / NUM_SAMPLES
