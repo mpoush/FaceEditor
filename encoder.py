@@ -8,6 +8,8 @@ SHIFT_AMOUNT = 9
 BATCH_SIZE = 8
 NUM_KERNELS = 20
 CONTINUE_TRAIN = False
+SHOW_ALL_IMAGES = False
+SHOW_EVERY_N_IMAGES = 10
 
 NUM_EPOCHS = 2000
 SAVE_EVERY = 20
@@ -170,6 +172,12 @@ for iters in xrange(NUM_EPOCHS):
 	
 	if iters % SAVE_EVERY == 0:
 		model.save('Encoder.h5')
+		if SHOW_ALL_IMAGES:
+			outputs = model.predict(x_train[::SHOW_EVERY_N_IMAGES])
+			digits = len(str(len(outputs)))
+			for i, output in enumerate(outputs):
+				padded = str(i).rjust(digits,'0')
+				save_image(output, 'outputs/output_%s.png' % padded)
 		
 		y_faces = model.predict(x_train[:NUM_TEST_FACES], batch_size=BATCH_SIZE)
 		for i in xrange(y_faces.shape[0]):

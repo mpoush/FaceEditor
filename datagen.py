@@ -34,7 +34,7 @@ x_data = np.empty((NUM_SAMPLES, NUM_CHANNELS, IMAGE_H, IMAGE_W), dtype=np.uint8)
 y_data = np.empty((NUM_SAMPLES, 3, IMAGE_H, IMAGE_W), dtype=np.uint8)
 ix = 0
 for root, subdirs, files in os.walk(IMAGE_DIR):
-	for file in files:
+	for file in sorted(files):
 		path = root + "/" + file
 		if not (path.endswith('.jpg') or path.endswith('.png')):
 			continue
